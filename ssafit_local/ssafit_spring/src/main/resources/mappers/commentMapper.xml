@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- name space는 UserRepo의 fully qualified name으로 설정한다. -->
+<mapper namespace="com.ssafy.ssafit.model.dao.CommentDao">
+	<resultMap type="Comment" id="commentMap">
+		<result column="comment_id" property="commentId"/>
+		<result column="users_id" property="writer"/>
+		<result column="videos_video_id" property="videoId"/>
+		<result column="content" property="content"/>
+		<result column="parent" property="parent"/>
+		<result column="regist_day" property="registDay"/>
+	</resultMap>
+
+	<select id="selectByVideoId" parameterType="map" resultMap="commentMap">
+		SELECT *
+		FROM comments
+		WHERE videos_video_id = #{videoId}
+		ORDER BY parent DESC, comment_id ASC	
+		LIMIT #{startNum}, 20
+	</select>
+	
+	<insert id="insertComment" parameterType="comment" useGeneratedKeys="true" keyProperty="commentId">
+		INSERT INTO comments (videos_video_id, users_id, content, parent)
+		VALUES(#{videoId}, #{writer}, #{content}, #{parent});
+	</insert>
+	
+	<update id="updateComment" parameterType="comment">
+		UPDATE comments
+		SET
+		users_id = #{writer},
+		content = #{content},
+		parent = #{parent}
+		WHERE comment_id = #{commentId}
+	</update>
+	
+	<delete id="deleteComment" parameterType="int">
+		DELETE FROM comments
+		WHERE comment_id = #{commentId}
+	</delete>
+	
+	<delete id="deleteAllComment" parameterType="String">
+		DELETE FROM comments
+		WHERE videos_video_id = #{videoId}
+	</delete>
+	
+	<select id="countComment" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM comments
+		WHERE videos_video_id = #{videoId}
+	</select>
+	
+	<select id="countChild" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		FROM comments
+		WHERE parent = #{commentId}
+	</select>
+	
+	
+<!--
+
+	검색기능 현재 불필요하다고 판단되어 주석처리 
+	<select id="searchComment" parameterType="HashMap" resultMap="commentMap">
+		SELECT *
+		FROM comments
+		<if test="mode == 1">
+		WHERE users_id LIKE '%${keyword}%'
+		</if>
+		<if test="mode == 2">
+		WHERE content LIKE '%${keyword}%'
+		</if>
+	</select>
+-->
+	
+</mapper>

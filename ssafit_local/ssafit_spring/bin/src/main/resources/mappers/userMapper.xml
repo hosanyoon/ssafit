@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- name space는 UserRepo의 fully qualified name으로 설정한다. -->
+<mapper namespace="com.ssafy.ssafit.model.dao.UserDao">
+
+	<resultMap type="User" id="userLikeMap">
+		<result column="user_id" property="id" />
+		<result column="videos_video_id" property="likedVideo" />
+	</resultMap>
+	
+	<resultMap type="Video" id="videoMap">
+		<result column="video_id" property="videoId"/>
+		<result column="video_title" property="videoTitle"/>
+		<result column="video_part" property="videoPart"/>
+		<result column="view_cnt" property="viewCnt"/>
+	</resultMap>
+
+	<select id="selectUserById" parameterType="String"
+		resultType="User">
+		SELECT *
+		FROM users
+		WHERE id = #{id}
+	</select>
+
+	<insert id="insertUser" parameterType="User">
+		INSERT INTO users
+		VALUES
+		(#{id}, #{password}, #{age}, #{sex}, #{height}, #{preference},
+		#{image});
+	</insert>
+
+	<insert id="insertUserBody" parameterType="User">
+		INSERT INTO user_body (users_id, weight, recent)
+		VALUES (#{id}, #{weight}, #{recent})
+	</insert>
+
+	<select id="selectUserAll" resultType="User">
+		SELECT * FROM users
+	</select>
+
+	<select id="getUserByName" parameterType="string"
+		resultType="User">
+		SELECT * FROM users
+		WHERE name LIKE CONCAT('%', ${name},
+		'%')
+	</select>
+
+	<delete id="deleteUser" parameterType="string">
+		DELETE From users WHERE
+		id= #{id}
+	</delete>
+	<update id="updateUser" parameterType="User">
+		UPDATE users SET
+		password=#{password}, age=#{age}, height=#{height}, weight=#{weight}, recent=#{recent}, sex=#{sex}, preference=#{preference}
+		WHERE
+		id=#{id}
+	</update>
+
+	<select id="selectUserList" parameterType="HashMap"
+		resultType="User">
+		SELECT * FROM users
+		<if test="mode==1">
+			WHERE id LIKE CONCAT('%', #{value}, '%')
+		</if>
+	</select>
+
+	<select id="selectRecords" parameterType="string"
+		resultType="User">
+		SELECT * FROM user_body
+		WHERE users_id = #{id}
+		ORDER BY date
+		ASC
+	</select>
+
+	<select id="selectLastRecord" parameterType="string"
+		resultType="User">
+		SELECT * FROM user_body
+		WHERE users_id = #{id}
+		ORDER BY date
+		DESC
+		LIMIT 1;
+	</select>
+
+	<select id="selectLikedVideos" parameterType="string"
+		resultMap="videoMap">
+		SELECT video_id, video_title, video_part, view_cnt 
+		FROM videos, user_like
+		WHERE users_id = #{id} AND videos_video_id = video_id
+	</select>
+
+	<insert id="insertLikedVideo" parameterType="string">
+		INSERT INTO
+		user_like
+		VALUES (#{id}, #{likedVideo})
+	</insert>
+
+	<delete id="deleteLikedVideo" parameterType="string">
+		DELETE FROM
+		user_like
+		WHERE users_id= #{id} AND videos_video_id=#{likedVideo}
+	</delete>
+
+</mapper>

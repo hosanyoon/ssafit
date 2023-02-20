@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- name space는 UserRepo의 fully qualified name으로 설정한다. -->
+<mapper namespace="com.ssafy.ssafit.model.dao.VideoDao">
+
+	<resultMap type="Video" id="videoMap">
+		<result column="video_id" property="videoId"/>
+		<result column="video_title" property="videoTitle"/>
+		<result column="video_part" property="videoPart"/>
+		<result column="view_cnt" property="viewCnt"/>
+	</resultMap>
+	
+	
+	<select id="selectVideoById" parameterType="string" resultMap="videoMap">
+		SELECT *
+		FROM videos
+		WHERE video_id = #{videoId}
+	</select>
+	
+	<select id="selectMostViewedVideos" resultMap="videoMap">
+		SELECT *
+		FROM videos
+		ORDER BY view_cnt DESC
+		LIMIT 5
+	</select>
+	
+	<insert id="insertVideo" parameterType="Video">
+		INSERT INTO videos
+		SELECT #{videoId}, #{videoTitle}, #{videoPart}, 0
+		WHERE NOT EXISTS(SELECT * FROM videos WHERE video_id = #{videoId})
+	</insert>
+	
+	<update id="updateVideo" parameterType="Video">
+		UPDATE videos
+		SET video_title=#{videoTitle}, video_part=#{videoPart}, view_cnt=#{viewCnt}
+		WHERE video_id = #{videoId}
+	</update>
+	
+	<delete id="deleteVideo" parameterType="String">
+		DELETE FROM videos
+		WHERE video_id = #{videoId}
+	</delete>
+	
+	<select id="selectVideosByPart" parameterType="int" resultMap="videoMap">
+		SELECT *
+		FROM videos
+		WHERE video_part = #{videoPart}
+	</select>
+	
+	<select id="selectVideosByTitle" parameterType="string" resultMap="videoMap">
+		SELECT *
+		FROM videos
+		WHERE video_title LIKE CONCAT('%', #{title}, '%')
+	</select>
+	
+	<select id="countLikedVideo" parameterType="string" resultType="int">
+		SELECT COUNT(*) 
+		FROM user_like
+		WHERE users_id = #{userId} AND videos_video_id = #{videoId}
+	</select>
+	
+	
+</mapper>
