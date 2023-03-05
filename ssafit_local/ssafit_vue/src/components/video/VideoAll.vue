@@ -33,7 +33,7 @@ export default {
     console.log("all 생성 가자");
     const API_URL = "https://www.googleapis.com/youtube/v3/search";
     const YOUTUBE_KEY = process.env.VUE_APP_YOUTUBE_API_KEY;
-    let keyword = "뉴진스";
+    let keyword = "헬스";
     axios({
       url: API_URL,
       method: "GET",
@@ -42,7 +42,7 @@ export default {
         part: "snippet",
         q: keyword,
         type: "video",
-        maxResults: 1,
+        maxResults: 5,
       },
     })
       .then((res) => {

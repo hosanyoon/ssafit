@@ -94,7 +94,7 @@ export default {
         part: "snippet",
         q: keyword,
         type: "video",
-        maxResults: 1,
+        maxResults: 5,
       },
     })
       .then((res) => {

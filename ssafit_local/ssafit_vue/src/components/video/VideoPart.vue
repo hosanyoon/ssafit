@@ -49,36 +49,36 @@ export default {
       part: 0,
     };
   },
-  // created() {
-  //   const API_URL = "https://www.googleapis.com/youtube/v3/search";
-  //   const YOUTUBE_KEY = process.env.VUE_APP_YOUTUBE_API_KEY;
-  //   let keyword = "등";
-  //   axios({
-  //     url: API_URL,
-  //     method: "GET",
-  //     params: {
-  //       key: YOUTUBE_KEY,
-  //       part: "snippet",
-  //       q: keyword,
-  //       type: "video",
-  //       maxResults: 1,
-  //     },
-  //   })
-  //     .then((res) => {
-  //       res.data.items.forEach((ele) => {
-  //         let video = {
-  //           videoId: ele.id.videoId,
-  //           videoTitle: ele.snippet.title,
-  //           exercisePart: 0,
-  //           viewCnt: 0,
-  //         };
-  //         this.videos.push(video);
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // },
+  created() {
+    const API_URL = "https://www.googleapis.com/youtube/v3/search";
+    const YOUTUBE_KEY = process.env.VUE_APP_YOUTUBE_API_KEY;
+    let keyword = "등";
+    axios({
+      url: API_URL,
+      method: "GET",
+      params: {
+        key: YOUTUBE_KEY,
+        part: "snippet",
+        q: keyword,
+        type: "video",
+        maxResults: 5,
+      },
+    })
+      .then((res) => {
+        res.data.items.forEach((ele) => {
+          let video = {
+            videoId: ele.id.videoId,
+            videoTitle: ele.snippet.title,
+            exercisePart: 0,
+            viewCnt: 0,
+          };
+          this.videos.push(video);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   methods: {
     selectPart(part) {
       if (part == "등") {
