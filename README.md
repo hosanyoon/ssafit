@@ -27,15 +27,15 @@
 ## 4. 주요 기능
  - 메인화면
 <img src="./docs/img/main(user).png" width=450>
-- 회원가입 및 로그인
+ - 회원가입 및 로그인
 <img src="./docs/img/regist.png" width=450>
 <img src="./docs/img/login.png" width=450>
 
-- 영상 댓글 및 찜 기능
+ - 영상 댓글 및 찜 기능
 <img src="./docs/img/video.png" width=450>
-- 운동 추천 기능
+ - 운동 추천 기능
 <img src="./docs/img/recommand.png" width=450>
-- 운동 기록 기능
+ - 운동 기록 기능
 <img src="./docs/img/commit.png" width=450>
-- 헬스장 검색 기능
+ - 헬스장 검색 기능
 <img src="./docs/img/gym.png" width=450>
